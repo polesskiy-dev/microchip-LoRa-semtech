@@ -1,4 +1,4 @@
-# Arduino LoRa
+# Semtech LoRa driver for Microchip SAM MCUs
 
 [![Build Status](https://travis-ci.org/sandeepmistry/arduino-LoRa.svg?branch=master)](https://travis-ci.org/sandeepmistry/arduino-LoRa)
 
