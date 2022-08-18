@@ -87,7 +87,7 @@ bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, vo
                     void (*SPI_SetCSHigh)(void),
                     void (*setNRESETLow)(void),
                     void (*setNRESETHigh)(void),
-                    void (*wait)(uint16_t ms)
+                    void (*wait)(uint32_t ms)
                     )__attribute__((nonnull));
 void LoRaReset(void);
 uint32_t LoRaBegin(uint32_t frequency);
@@ -154,7 +154,7 @@ uint8_t LoRaReadRegister(uint8_t address);
 void LoRaWriteRegister(uint8_t address, uint8_t value);
 uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value);
 
-static void LoRaOnDio0Rise(void);
+//static void LoRaOnDio0Rise(void);
 
 //private:
 //  SPISettings _spiSettings;
