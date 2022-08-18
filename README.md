@@ -14,6 +14,8 @@ A library for sending and receiving data using [LoRa](https://www.lora-alliance.
 
 ## API
 
+[See Dyoxygen generated API](./html)
+
 ## Examples
 
 See [examples](examples) folder.

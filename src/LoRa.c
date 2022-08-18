@@ -7,9 +7,9 @@ struct LoRa_t {
     bool (*SPI_Write)(void* pTransmitData, size_t txSize);
     bool (*SPI_Read)(void* pReceiveData, size_t rxSize);
     bool (*SPI_IsBusy)(void);
-    bool (*SPI_IsTransmitterBusy)(void));
-    void (*SPI_SetCSLow)(void),
-    void (*SPI_SetCSHigh)(void),
+    bool (*SPI_IsTransmitterBusy)(void);
+    void (*SPI_SetCSLow)(void);
+    void (*SPI_SetCSHigh)(void);
     void (*setNRESETLow)(void);
     void (*setNRESETHigh)(void);
     void (*wait)(uint16_t ms);
@@ -17,10 +17,10 @@ struct LoRa_t {
 
 struct LoRa_t LoRa;
 
-bool initLoRaDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize);
-                    bool (*SPI_Write)(void* pTransmitData, size_t txSize);
-                    bool (*SPI_Read)(void* pReceiveData, size_t rxSize);
-                    bool (*SPI_IsBusy)(void);
+bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize),
+                    bool (*SPI_Write)(void* pTransmitData, size_t txSize),
+                    bool (*SPI_Read)(void* pReceiveData, size_t rxSize),
+                    bool (*SPI_IsBusy)(void),
                     bool (*SPI_IsTransmitterBusy)(void),
                     void (*SPI_SetCSLow)(void),
                     void (*SPI_SetCSHigh)(void),
@@ -54,7 +54,7 @@ uint32_t LoRaBegin(uint32_t frequency) {
 
     // check version
     uint8_t version = LoRaReadRegister(LORA_REG_VERSION);
-    assert(version == LORA_SEMTECH_VERSION && "unsupported SEMTECH version"
+    assert(version == LORA_SEMTECH_VERSION && "unsupported SEMTECH version");
 
     // put in sleep mode
     LoRaSleep();
@@ -67,7 +67,7 @@ uint32_t LoRaBegin(uint32_t frequency) {
     LoRaWriteRegister(LORA_REG_FIFO_RX_BASE_ADDR, 0);
 
     // set LNA boost
-    LoRaWriteRegister(LORA_REG_LNA, LoRaReadRegister(REG_LNA) | 0x03);
+    LoRaWriteRegister(LORA_REG_LNA, LoRaReadRegister(LORA_REG_LNA) | 0x03);
 
     // set auto AGC
     LoRaWriteRegister(LORA_REG_MODEM_CONFIG_3, 0x04);
@@ -103,7 +103,7 @@ void LoRaSetFrequency(uint32_t frequency) {
 };
 
 void LoRaSetTxPower(uint32_t level, uint32_t outputPin/* = PA_OUTPUT_PA_BOOST_PIN*/) {
-    if (PA_OUTPUT_RFO_PIN == outputPin) {
+    if (LORA_PA_OUTPUT_RFO_PIN == outputPin) {
         // RFO
         if (level < 0) {
             level = 0;
@@ -166,7 +166,7 @@ uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
     uint8_t response[1] = {0};
 
     LoRa.SPI_SetCSLow();
-    
+
     LoRa.SPI_WriteRead((uint8_t*){address, value}, 2, response, 1);
     while(LoRa.SPI_IsBusy());
 

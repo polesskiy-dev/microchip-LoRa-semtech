@@ -7,6 +7,7 @@
 extern "C" {
 #endif
 
+#include <stddef.h>
 #include <stdbool.h>
 #include <stdint.h>
 #include <assert.h>
@@ -77,10 +78,10 @@ extern "C" {
 
 #define LORA_ISR_PREFIX
 
-bool initLoRaDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize);
-                    bool (*SPI_Write)(void* pTransmitData, size_t txSize);
-                    bool (*SPI_Read)(void* pReceiveData, size_t rxSize);
-                    bool (*SPI_IsBusy)(void);
+bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize),
+                    bool (*SPI_Write)(void* pTransmitData, size_t txSize),
+                    bool (*SPI_Read)(void* pReceiveData, size_t rxSize),
+                    bool (*SPI_IsBusy)(void),
                     bool (*SPI_IsTransmitterBusy)(void),
                     void (*SPI_SetCSLow)(void),
                     void (*SPI_SetCSHigh)(void),
