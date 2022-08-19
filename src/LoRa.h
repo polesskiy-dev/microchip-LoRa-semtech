@@ -78,6 +78,23 @@ extern "C" {
 
 #define LORA_ISR_PREFIX
 
+/**
+ * @brief init LoRa driver by passing SPI functions
+ * @details For now, it's only 1 driver instance.
+ * TODO allow multiple drivers in the system
+ *
+ * @param SPI_WriteRead
+ * @param SPI_Write
+ * @param SPI_Read
+ * @param SPI_IsBusy
+ * @param SPI_IsTransmitterBusy
+ * @param SPI_SetCSLow
+ * @param SPI_SetCSHigh
+ * @param setNRESETLow
+ * @param setNRESETHigh
+ * @param wait - the most tricky one, wait in ms
+ * @return true
+ */
 bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize),
                     bool (*SPI_Write)(void* pTransmitData, size_t txSize),
                     bool (*SPI_Read)(void* pReceiveData, size_t rxSize),
@@ -89,7 +106,71 @@ bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, vo
                     void (*setNRESETHigh)(void),
                     void (*wait)(uint32_t ms)
                     )__attribute__((nonnull));
+/**
+ * @brief Reset LoRa
+ *
+ * @details set nRESET LOW, wait, HIGH, wait
+ */
 void LoRaReset(void);
+
+/**
+ * @brief Setup SX1278 chip sequence
+ * @details SPI flow example:
+    |SPI|Time      |MISO|MOSI |
+    |---|----------|----|-----|
+    |1  |-6.71000us|0x00|     |
+    |2  |-6.71000us|    | 0x42|
+    |3  |3.06000us |0x12|     |
+    |4  |3.06000us |    | 0x00|
+    |5  |22.0700us |0x00|     |
+    |6  |22.0700us |    | 0x81|
+    |7  |31.8600us |0x0F|     |
+    |8  |31.8600us |    | 0x80|
+    |9  |67.2200us |0xAD|     |
+    |10 |67.2200us |    | 0x86|
+    |11 |77.0000us |0x6C|     |
+    |12 |77.0000us |    | 0x6C|
+    |13 |95.8300us |0xAD|     |
+    |14 |95.8300us |    | 0x87|
+    |15 |105.620us |0x80|     |
+    |16 |105.620us |    | 0x80|
+    |17 |124.300us |0xAD|     |
+    |18 |124.300us |    | 0x88|
+    |19 |134.080us |0x00|     |
+    |20 |134.080us |    | 0x00|
+    |21 |152.910us |0xAD|     |
+    |22 |152.910us |    | 0x8E|
+    |23 |162.690us |0x80|     |
+    |24 |162.690us |    | 0x00|
+    |25 |181.280us |0xAD|     |
+    |26 |181.280us |    | 0x8F|
+    |27 |191.050us |0x00|     |
+    |28 |191.050us |    | 0x00|
+    |29 |209.450us |0xAD|     |
+    |30 |209.450us |    | 0x0C|
+    |31 |219.230us |0x20|     |
+    |32 |219.230us |    | 0x00|
+    |33 |238.040us |0xAD|     |
+    |34 |238.040us |    | 0x8C|
+    |35 |247.820us |0x20|     |
+    |36 |247.820us |    | 0x23|
+    |37 |266.410us |0xAD|     |
+    |38 |266.410us |    | 0xA6|
+    |39 |276.180us |0x04|     |
+    |40 |276.180us |    | 0x04|
+    |41 |295.520us |0xAD|     |
+    |42 |295.520us |    | 0x89|
+    |43 |305.310us |0x4F|     |
+    |44 |305.310us |    | 0x74|
+    |45 |324.380us |0xAD|     |
+    |46 |324.380us |    | 0x81|
+    |47 |334.170us |0x80|     |
+    |48 |334.170us |    | 0x81|
+ *
+ * @param frequency - LoRa frequency, e.g. 434000000
+ *
+ * @return success of the operation
+ */
 uint32_t LoRaBegin(uint32_t frequency);
 void LoRaEnd();
 
@@ -103,22 +184,18 @@ uint32_t LoRaPacketFrequencyError();
 
 uint32_t LoRaRssi();
 
-  // from Print
-//  virtual size_t write(uint8_t byte);
-//  virtual size_t write(const uint8_t *buffer, size_t size);
-
-  // from Stream
-//  virtual int available();
-//  virtual int read();
-//  virtual int peek();
-//  virtual void flush();
-
 void LoRaOnReceive(void(*callback)(uint32_t));
 void LoRaOnTxDone(void(*callback)(void ));
 
 void LoRaReceive(uint32_t size);
 
+/**
+ * @brief switch LoRa to idle mode
+ */
 void LoRaIdle(void);
+/**
+ * @brief switch LoRa to sleep mode
+ */
 void LoRaSleep(void);
 
 void LoRaSetTxPower(uint32_t level, uint32_t outputPin/* = PA_OUTPUT_PA_BOOST_PIN*/);
@@ -133,9 +210,19 @@ void LoRaDisableCrc(void);
 void LoRaEnableInvertIQ(void);
 void LoRaDisableInvertIQ(void);
   
-void LoRaSetOCP(uint8_t mA); // Over Current Protection control
-  
-void LoRaSetGain(uint8_t gain); // Set LNA gain
+/**
+ * @brief set "Over Current Protection" control
+ *
+ * @param mA
+ */
+void LoRaSetOCP(uint8_t mA);
+
+/**
+ * @brief set LNA gain
+ * 
+ * @param gain
+ */
+void LoRaSetGain(uint8_t gain);
 
 //void dumpRegisters(Stream& out);
 

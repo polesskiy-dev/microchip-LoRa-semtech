@@ -67,13 +67,14 @@ uint32_t LoRaBegin(uint32_t frequency) {
     LoRaWriteRegister(LORA_REG_FIFO_RX_BASE_ADDR, 0);
 
     // set LNA boost
-    LoRaWriteRegister(LORA_REG_LNA, LoRaReadRegister(LORA_REG_LNA) | 0x03);
+    uint8_t lnaVal = LoRaReadRegister(LORA_REG_LNA);
+    LoRaWriteRegister(LORA_REG_LNA, lnaVal | 0x03);
 
     // set auto AGC
     LoRaWriteRegister(LORA_REG_MODEM_CONFIG_3, 0x04);
 
     // set output power to 17 dBm
-    LoRaSetTxPower(17, LORA_PA_OUTPUT_RFO_PIN);
+    LoRaSetTxPower(4, LORA_PA_OUTPUT_RFO_PIN);
 
     // put in standby mode
     LoRaIdle();
@@ -163,16 +164,16 @@ uint8_t LoRaReadRegister(uint8_t address) {
 };
 
 uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
-    uint8_t response[1] = {0};
+    uint8_t response[2] = {NULL, NULL};
 
     LoRa.SPI_SetCSLow();
 
-    LoRa.SPI_WriteRead((uint8_t[2]){address, value}, 2, response, 1);
+    LoRa.SPI_WriteRead((uint8_t[2]){address, value}, 2, response, 2);
     while(LoRa.SPI_IsBusy());
 
     LoRa.SPI_SetCSHigh();
 
-    return response[0];
+    return response[1];
 };
 
 

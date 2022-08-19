@@ -14,7 +14,9 @@ A library for sending and receiving data using [LoRa](https://www.lora-alliance.
 
 ## API
 
-[See Dyoxygen generated API](./html)
+[See Dyoxygen generated API](https://polesskiy-dev.github.io/microchip-LoRa-semtech)
+
+Some functions description include SPI decoded flow
 
 ## Examples
 
