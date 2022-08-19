@@ -219,7 +219,7 @@ void LoRaSetOCP(uint8_t mA);
 
 /**
  * @brief set LNA gain
- * 
+ *
  * @param gain
  */
 void LoRaSetGain(uint8_t gain);
