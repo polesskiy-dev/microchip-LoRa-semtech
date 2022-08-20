@@ -174,8 +174,26 @@ void LoRaReset(void);
 uint32_t LoRaBegin(uint32_t frequency);
 void LoRaEnd();
 
+/**
+ * @brief Prepare LoRa transmission.
+ * Explicit Header Mode
+ * This is the default mode of operation. Here the header provides information on the payload, namely:
+ * The payload length in bytes.
+ * The forward error correction code rate
+ * The presence of an optional 16-bits CRC for the payload.
+ *
+ * Implicit Header Mode
+ * In certain scenarios, where the payload, coding rate and CRC presence are fixed or known in advance, it may be
+ * advantageous to reduce transmission time by invoking implicit header mode. In this mode the header is removed from the
+ * packet. In this case the payload length, error coding rate and presence of the payload CRC must be manually configured
+ * on both sides of the radio link.
+ *
+ * @param implicitHeader - true: implicit header mode, false is recommended
+ * @return 1
+ */
 uint32_t LoRaBeginPacket(bool implicitHeader);
 uint32_t LoRaEndPacket(bool async);
+size_t LoRaWrite(const uint8_t *buffer, size_t size);
 
 uint32_t LoRaParsePacket(uint32_t size);
 uint32_t LoRaPacketRssi();

@@ -3,6 +3,7 @@
 #include "LoRa.h"
 
 struct LoRa_t {
+    // TODO add here system sleep function
     bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize);
     bool (*SPI_Write)(void* pTransmitData, size_t txSize);
     bool (*SPI_Read)(void* pReceiveData, size_t rxSize);
@@ -13,6 +14,8 @@ struct LoRa_t {
     void (*setNRESETLow)(void);
     void (*setNRESETHigh)(void);
     void (*wait)(uint32_t ms);
+    bool _implicitHeaderMode;
+    bool _onTxDone;
 };
 
 struct LoRa_t LoRa;
@@ -74,7 +77,7 @@ uint32_t LoRaBegin(uint32_t frequency) {
     LoRaWriteRegister(LORA_REG_MODEM_CONFIG_3, 0x04);
 
     // set output power to 17 dBm
-    LoRaSetTxPower(4, LORA_PA_OUTPUT_RFO_PIN);
+    LoRaSetTxPower(17, LORA_PA_OUTPUT_RFO_PIN);
 
     // put in standby mode
     LoRaIdle();
@@ -255,62 +258,56 @@ uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
 //  _spi->end();
 //}
 //
-//int LoRaClass::beginPacket(int implicitHeader)
-//{
-//  if (isTransmitting()) {
-//    return 0;
-//  }
-//
-//  // put in standby mode
-//  idle();
-//
-//  if (implicitHeader) {
-//    implicitHeaderMode();
-//  } else {
-//    explicitHeaderMode();
-//  }
-//
-//  // reset FIFO address and paload length
-//  writeRegister(REG_FIFO_ADDR_PTR, 0);
-//  writeRegister(REG_PAYLOAD_LENGTH, 0);
-//
-//  return 1;
-//}
-//
-//int LoRaClass::endPacket(bool async)
-//{
-//
-//  if ((async) && (_onTxDone))
-//      writeRegister(REG_DIO_MAPPING_1, 0x40); // DIO0 => TXDONE
-//
-//  // put in TX mode
-//  writeRegister(REG_OP_MODE, MODE_LONG_RANGE_MODE | MODE_TX);
-//
-//  if (!async) {
-//    // wait for TX done
-//    while ((readRegister(REG_IRQ_FLAGS) & IRQ_TX_DONE_MASK) == 0) {
-//      yield();
-//    }
-//    // clear IRQ's
-//    writeRegister(REG_IRQ_FLAGS, IRQ_TX_DONE_MASK);
-//  }
-//
-//  return 1;
-//}
-//
-//bool LoRaClass::isTransmitting()
-//{
-//  if ((readRegister(REG_OP_MODE) & MODE_TX) == MODE_TX) {
-//    return true;
-//  }
-//
-//  if (readRegister(REG_IRQ_FLAGS) & IRQ_TX_DONE_MASK) {
-//    // clear IRQ's
-//    writeRegister(REG_IRQ_FLAGS, IRQ_TX_DONE_MASK);
-//  }
-//
-//  return false;
-//}
+uint32_t LoRaBeginPacket(bool implicitHeader) {
+  if (LoRaIsTransmitting()) {
+    return 0;
+  }
+
+  // put in standby mode
+  LoRaIdle();
+
+  if (implicitHeader) {
+    LoRaImplicitHeaderMode();
+  } else {
+    LoRaExplicitHeaderMode();
+  }
+
+  // reset FIFO address and payload length
+  LoRaWriteRegister(LORA_REG_FIFO_ADDR_PTR, 0);
+  LoRaWriteRegister(LORA_REG_PAYLOAD_LENGTH, 0);
+
+  return 1;
+}
+
+uint32_t LoRaEndPacket(bool async) {
+    if ((async) && (LoRa._onTxDone))
+        LoRaWriteRegister(LORA_REG_DIO_MAPPING_1, 0x40); // DIO0 => TXDONE
+
+  // put in TX mode
+  LoRaWriteRegister(LORA_REG_OP_MODE, LORA_MODE_LONG_RANGE_MODE | LORA_MODE_TX);
+
+  if (!async) {
+    // wait for TX done
+    while ((LoRaReadRegister(LORA_REG_IRQ_FLAGS) & LORA_IRQ_TX_DONE_MASK) == 0) {
+        //      yield();
+        // TODO add here system sleep function
+    }
+    // clear IRQ's
+    LoRaWriteRegister(LORA_REG_IRQ_FLAGS, LORA_IRQ_TX_DONE_MASK);
+  }
+
+  return 1;
+}
+
+bool LoRaIsTransmitting(void) {
+  if ((LoRaReadRegister(LORA_REG_OP_MODE) & LORA_MODE_TX) == LORA_MODE_TX)
+    return true;
+
+  if (LoRaReadRegister(LORA_REG_IRQ_FLAGS) & LORA_IRQ_TX_DONE_MASK)
+      LoRaWriteRegister(LORA_REG_IRQ_FLAGS, LORA_IRQ_TX_DONE_MASK); // clear IRQ's
+
+  return false;
+}
 //
 //int LoRaClass::parsePacket(int size)
 //{
@@ -396,25 +393,24 @@ uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
 //  return write(&byte, sizeof(byte));
 //}
 //
-//size_t LoRaClass::write(const uint8_t *buffer, size_t size)
-//{
-//  int currentLength = readRegister(REG_PAYLOAD_LENGTH);
-//
-//  // check size
-//  if ((currentLength + size) > MAX_PKT_LENGTH) {
-//    size = MAX_PKT_LENGTH - currentLength;
-//  }
-//
-//  // write data
-//  for (size_t i = 0; i < size; i++) {
-//    writeRegister(REG_FIFO, buffer[i]);
-//  }
-//
-//  // update length
-//  writeRegister(REG_PAYLOAD_LENGTH, currentLength + size);
-//
-//  return size;
-//}
+size_t LoRaWrite(const uint8_t *buffer, size_t size) {
+  int currentLength = LoRaReadRegister(LORA_REG_PAYLOAD_LENGTH);
+
+  // check size
+  if ((currentLength + size) > LORA_MAX_PKT_LENGTH) {
+    size = LORA_MAX_PKT_LENGTH - currentLength;
+  }
+
+  // write data
+  for (size_t i = 0; i < size; i++) {
+    LoRaWriteRegister(LORA_REG_FIFO, buffer[i]);
+  }
+
+  // update length
+  LoRaWriteRegister(LORA_REG_PAYLOAD_LENGTH, currentLength + size);
+
+  return size;
+}
 //
 //int LoRaClass::available()
 //{
@@ -771,19 +767,15 @@ uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
 //  }
 //}
 //
-//void LoRaClass::explicitHeaderMode()
-//{
-//  _implicitHeaderMode = 0;
-//
-//  writeRegister(REG_MODEM_CONFIG_1, readRegister(REG_MODEM_CONFIG_1) & 0xfe);
-//}
-//
-//void LoRaClass::implicitHeaderMode()
-//{
-//  _implicitHeaderMode = 1;
-//
-//  writeRegister(REG_MODEM_CONFIG_1, readRegister(REG_MODEM_CONFIG_1) | 0x01);
-//}
+void LoRaExplicitHeaderMode(void){
+    LoRa._implicitHeaderMode = false;
+    LoRaWriteRegister(LORA_REG_MODEM_CONFIG_1, LoRaReadRegister(LORA_REG_MODEM_CONFIG_1) & 0xfe);
+};
+
+void LoRaImplicitHeaderMode(void) {
+    LoRa._implicitHeaderMode = true;
+    LoRaWriteRegister(LORA_REG_MODEM_CONFIG_1, LoRaReadRegister(LORA_REG_MODEM_CONFIG_1) | 0x01);
+};
 //
 //void LoRaClass::handleDio0Rise()
 //{
