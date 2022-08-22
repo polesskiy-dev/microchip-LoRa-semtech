@@ -3,7 +3,7 @@
 #ifndef LORA_H
 #define LORA_H
 
-#ifdef	__cplusplus
+#ifdef    __cplusplus
 extern "C" {
 #endif
 
@@ -95,9 +95,9 @@ extern "C" {
  * @param wait - the most tricky one, wait in ms
  * @return true
  */
-bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, void* pReceiveData, size_t rxSize),
-                    bool (*SPI_Write)(void* pTransmitData, size_t txSize),
-                    bool (*SPI_Read)(void* pReceiveData, size_t rxSize),
+bool LoRaInitDriver(bool (*SPI_WriteRead)(void *pTransmitData, size_t txSize, void *pReceiveData, size_t rxSize),
+                    bool (*SPI_Write)(void *pTransmitData, size_t txSize),
+                    bool (*SPI_Read)(void *pReceiveData, size_t rxSize),
                     bool (*SPI_IsBusy)(void),
                     bool (*SPI_IsTransmitterBusy)(void),
                     void (*SPI_SetCSLow)(void),
@@ -105,7 +105,8 @@ bool LoRaInitDriver(bool (*SPI_WriteRead)(void* pTransmitData, size_t txSize, vo
                     void (*setNRESETLow)(void),
                     void (*setNRESETHigh)(void),
                     void (*wait)(uint32_t ms)
-                    )__attribute__((nonnull));
+)__attribute__((nonnull));
+
 /**
  * @brief Reset LoRa
  *
@@ -172,6 +173,7 @@ void LoRaReset(void);
  * @return success of the operation
  */
 uint32_t LoRaBegin(uint32_t frequency);
+
 void LoRaEnd();
 
 /**
@@ -192,18 +194,24 @@ void LoRaEnd();
  * @return 1
  */
 uint32_t LoRaBeginPacket(bool implicitHeader);
+
 uint32_t LoRaEndPacket(bool async);
+
 size_t LoRaWrite(const uint8_t *buffer, size_t size);
 
-uint32_t LoRaParsePacket(uint32_t size);
+uint32_t LoRaParsePacket(uint8_t size);
+
 uint32_t LoRaPacketRssi();
+
 float LoRaPacketSnr();
+
 uint32_t LoRaPacketFrequencyError();
 
 uint32_t LoRaRssi();
 
 void LoRaOnReceive(void(*callback)(uint32_t));
-void LoRaOnTxDone(void(*callback)(void ));
+
+void LoRaOnTxDone(void(*callback)(void));
 
 void LoRaReceive(uint8_t size);
 
@@ -218,17 +226,27 @@ void LoRaIdle(void);
 void LoRaSleep(void);
 
 void LoRaSetTxPower(uint32_t level, uint32_t outputPin/* = PA_OUTPUT_PA_BOOST_PIN*/);
+
 void LoRaSetFrequency(uint32_t frequency);
+
 void LoRaSetSpreadingFactor(uint32_t sf);
+
 void LoRaSetSignalBandwidth(uint32_t sbw);
+
 void LoRaSetCodingRate4(uint32_t denominator);
+
 void LoRaSetPreambleLength(uint32_t length);
+
 void LoRaSetSyncWord(uint32_t sw);
+
 void LoRaEnableCrc(void);
+
 void LoRaDisableCrc(void);
+
 void LoRaEnableInvertIQ(void);
+
 void LoRaDisableInvertIQ(void);
-  
+
 /**
  * @brief set "Over Current Protection" control
  *
@@ -245,42 +263,36 @@ void LoRaSetGain(uint8_t gain);
 
 //void dumpRegisters(Stream& out);
 uint32_t LoRaAvailable(void);
+
 uint8_t LoRaRead(void);
+
 uint8_t LoRaPeek(void);
 
-void LoRaSetOnReceive(void(*_onReceiveCb)(void));
+void LoRaSetOnReceive(void(*_onReceiveCb)(uint32_t packetLength));
+
 void LoRaSetOnTxDone(void(*_onTxDoneCb)(void));
 
 void LoRaExplicitHeaderMode(void);
+
 void LoRaImplicitHeaderMode();
 
 void LoRaHandleDio0Rise(void);
+
 bool LoRaIsTransmitting(void);
 
 uint32_t LoRaGetSpreadingFactor(void);
+
 uint32_t LoRaGetSignalBandwidth(void);
 
 void LoRaSetLdoFlag(void);
 
 uint8_t LoRaReadRegister(uint8_t address);
+
 void LoRaWriteRegister(uint8_t address, uint8_t value);
+
 uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value);
 
-//static void LoRaOnDio0Rise(void);
-
-//private:
-//  SPISettings _spiSettings;
-//  SPIClass* _spi;
-//  uint32_t _ss;
-//  uint32_t _reset;
-//  uint32_t _dio0;
-//  long _frequency;
-//  uint32_t _packetIndex;
-//  uint32_t _implicitHeaderMode;
-//  void (*_onReceive)(uint32_t);
-//  void (*_onTxDone)();
-
-#ifdef	__cplusplus
+#ifdef    __cplusplus
 }
 #endif
 

@@ -26,7 +26,7 @@ struct LoRa_t {
 
     void (*_onTxDoneCb)(void);
 
-    void (*_onReceiveCb)(void);
+    void (*_onReceiveCb)(uint32_t packetLength);
 
     bool _implicitHeaderMode;
     uint32_t _frequency;
@@ -116,9 +116,9 @@ void LoRaSetFrequency(uint32_t frequency) {
 
     uint64_t frf = ((uint64_t) frequency << 19) / 32000000;
 
-    LoRaWriteRegister(LORA_REG_FRF_MSB, (uint8_t)(frf >> 16));
-    LoRaWriteRegister(LORA_REG_FRF_MID, (uint8_t)(frf >> 8));
-    LoRaWriteRegister(LORA_REG_FRF_LSB, (uint8_t)(frf >> 0));
+    LoRaWriteRegister(LORA_REG_FRF_MSB, (uint8_t) (frf >> 16));
+    LoRaWriteRegister(LORA_REG_FRF_MID, (uint8_t) (frf >> 8));
+    LoRaWriteRegister(LORA_REG_FRF_LSB, (uint8_t) (frf >> 0));
 };
 
 void LoRaSetTxPower(uint32_t level, uint32_t outputPin) {
@@ -182,7 +182,7 @@ uint8_t LoRaReadRegister(uint8_t address) {
 };
 
 uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value) {
-    uint8_t response[2] = {NULL, NULL};
+    uint8_t response[2] = {0, 0};
 
     LoRa.SPI_SetCSLow();
 
@@ -245,7 +245,7 @@ bool LoRaIsTransmitting(void) {
     return false;
 };
 
-int LoRaParsePacket(size_t size) {
+uint32_t LoRaParsePacket(uint8_t size) {
     int packetLength = 0;
     int irqFlags = LoRaReadRegister(LORA_REG_IRQ_FLAGS);
 
@@ -300,11 +300,11 @@ float LoRaPacketSnr() {
 
 uint32_t LoRaPacketFrequencyError() {
     int32_t freqError = 0;
-    freqError = static_cast<int32_t>(LoRaReadRegister(LORA_REG_FREQ_ERROR_MSB) & 0b111);
+    freqError = (int32_t) (LoRaReadRegister(LORA_REG_FREQ_ERROR_MSB) & 0b111);
     freqError <<= 8L;
-    freqError += static_cast<int32_t>(LoRaReadRegister(LORA_REG_FREQ_ERROR_MID));
+    freqError += (int32_t) (LoRaReadRegister(LORA_REG_FREQ_ERROR_MID));
     freqError <<= 8L;
-    freqError += static_cast<int32_t>(LoRaReadRegister(LORA_REG_FREQ_ERROR_LSB));
+    freqError += (int32_t) (LoRaReadRegister(LORA_REG_FREQ_ERROR_LSB));
 
     if (LoRaReadRegister(LORA_REG_FREQ_ERROR_MSB) & 0b1000) { // Sign bit is on
         freqError -= 524288; // 0b1000'0000'0000'0000'0000
@@ -312,12 +312,12 @@ uint32_t LoRaPacketFrequencyError() {
 
     const float fXtal = 32E6; // FXOSC: crystal oscillator (XTAL) frequency (2.5. Chip Specification, p. 14)
     const float fError =
-            ((static_cast<float>(freqError) * (1L << 24)) / fXtal) * (LoRaGetSignalBandwidth() / 500000.0f); // p. 37
+            (((float) (freqError) * (1L << 24)) / fXtal) * (LoRaGetSignalBandwidth() / 500000.0f); // p. 37
 
-    return (uint32_t)(fError);
+    return (uint32_t) (fError);
 };
 
-int LoRaRssi() {
+uint32_t LoRaRssi() {
     return (LoRaReadRegister(LORA_REG_RSSI_VALUE) -
             (LoRa._frequency < LORA_RF_MID_BAND_THRESHOLD ? LORA_RSSI_OFFSET_LF_PORT : LORA_RSSI_OFFSET_HF_PORT));
 };
@@ -364,7 +364,7 @@ uint8_t LoRaPeek(void) {
     uint8_t currentAddress = LoRaReadRegister(LORA_REG_FIFO_ADDR_PTR);
 
     // read
-    uint8_t b = LoRaReadRegister(REG_FIFO);
+    uint8_t b = LoRaReadRegister(LORA_REG_FIFO);
 
     // restore FIFO address
     LoRaWriteRegister(LORA_REG_FIFO_ADDR_PTR, currentAddress);
@@ -372,7 +372,7 @@ uint8_t LoRaPeek(void) {
     return b;
 };
 
-void LoRaSetOnReceive(void(*_onReceiveCb)(void)) {
+void LoRaSetOnReceive(void(*_onReceiveCb)(uint32_t packetLength)) {
     LoRa._onReceiveCb = _onReceiveCb;
 };
 
@@ -417,8 +417,8 @@ void LoRaSetSpreadingFactor(uint32_t sf) {
     LoRaSetLdoFlag();
 };
 
-long LoRaGetSignalBandwidth() {
-    byte bw = (LoRaReadRegister(LORA_REG_MODEM_CONFIG_1) >> 4);
+uint32_t LoRaGetSignalBandwidth() {
+    uint8_t bw = (LoRaReadRegister(LORA_REG_MODEM_CONFIG_1) >> 4);
 
     switch (bw) {
         case 0:
@@ -486,7 +486,7 @@ void LoRaSetLdoFlag() {
     // TODO double check
     ldoOn
     ? config3 | 0b00001000
-    : config3 & 0b11110111
+    : config3 & 0b11110111;
 
     LoRaWriteRegister(LORA_REG_MODEM_CONFIG_3, config3);
 };
@@ -504,8 +504,8 @@ void LoRaSetCodingRate4(uint32_t denominator) {
 };
 
 void LoRaSetPreambleLength(uint32_t length) {
-    LoRaWriteRegister(LORA_REG_PREAMBLE_MSB, (uint8_t)(length >> 8));
-    LoRaWriteRegister(LORA_REG_PREAMBLE_LSB, (uint8_t)(length >> 0));
+    LoRaWriteRegister(LORA_REG_PREAMBLE_MSB, (uint8_t) (length >> 8));
+    LoRaWriteRegister(LORA_REG_PREAMBLE_LSB, (uint8_t) (length >> 0));
 };
 
 void LoRaSetSyncWord(uint32_t sw) {
@@ -579,7 +579,7 @@ void LoRaHandleDio0Rise() {
             LoRa._packetIndex = 0;
 
             // read packet length
-            uint32_t packetLength = _implicitHeaderMode ? LoRaReadRegister(LORA_REG_PAYLOAD_LENGTH) : LoRaReadRegister(
+            uint32_t packetLength = LoRa._implicitHeaderMode ? LoRaReadRegister(LORA_REG_PAYLOAD_LENGTH) : LoRaReadRegister(
                     LORA_REG_RX_NB_BYTES);
 
             // set FIFO address to current RX address
