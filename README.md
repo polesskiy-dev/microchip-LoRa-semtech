@@ -1,7 +1,5 @@
 # Semtech LoRa driver for Microchip SAM MCUs
 
-[![Build Status](https://travis-ci.org/sandeepmistry/arduino-LoRa.svg?branch=master)](https://travis-ci.org/sandeepmistry/arduino-LoRa)
-
 A library for sending and receiving data using [LoRa](https://www.lora-alliance.org/) radios, primary for Microchip SAM MCU's  radios.
 
 ## Compatible Hardware

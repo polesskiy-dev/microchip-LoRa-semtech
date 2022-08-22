@@ -1,5 +1,11 @@
 // Licensed under the MIT license. See LICENSE file in the project root for full license information.
 
+/**
+ * @file:   LoRa.c
+ * @author: apolisskyi
+ *
+ * @brief Semtech LoRa driver for Microchip SAM MCUs library realization.
+ */
 #include "LoRa.h"
 
 struct LoRa_t {
