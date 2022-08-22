@@ -76,7 +76,7 @@ $(function() {
 <div class="line"><a name="l00003"></a><span class="lineno">    3</span>&#160;<span class="preprocessor">#ifndef LORA_H</span></div>
 <div class="line"><a name="l00004"></a><span class="lineno">    4</span>&#160;<span class="preprocessor">#define LORA_H</span></div>
 <div class="line"><a name="l00005"></a><span class="lineno">    5</span>&#160; </div>
-<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#ifdef  __cplusplus</span></div>
+<div class="line"><a name="l00006"></a><span class="lineno">    6</span>&#160;<span class="preprocessor">#ifdef    __cplusplus</span></div>
 <div class="line"><a name="l00007"></a><span class="lineno">    7</span>&#160;<span class="keyword">extern</span> <span class="stringliteral">&quot;C&quot;</span> {</div>
 <div class="line"><a name="l00008"></a><span class="lineno">    8</span>&#160;<span class="preprocessor">#endif</span></div>
 <div class="line"><a name="l00009"></a><span class="lineno">    9</span>&#160; </div>
@@ -151,9 +151,9 @@ $(function() {
 <div class="line"><a name="l00078"></a><span class="lineno">   78</span>&#160; </div>
 <div class="line"><a name="l00079"></a><span class="lineno">   79</span>&#160;<span class="preprocessor">#define LORA_ISR_PREFIX</span></div>
 <div class="line"><a name="l00080"></a><span class="lineno">   80</span>&#160; </div>
-<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keywordtype">bool</span> LoRaInitDriver(<span class="keywordtype">bool</span> (*SPI_WriteRead)(<span class="keywordtype">void</span>* pTransmitData, <span class="keywordtype">size_t</span> txSize, <span class="keywordtype">void</span>* pReceiveData, <span class="keywordtype">size_t</span> rxSize),</div>
-<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_Write)(<span class="keywordtype">void</span>* pTransmitData, <span class="keywordtype">size_t</span> txSize),</div>
-<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_Read)(<span class="keywordtype">void</span>* pReceiveData, <span class="keywordtype">size_t</span> rxSize),</div>
+<div class="line"><a name="l00098"></a><span class="lineno">   98</span>&#160;<span class="keywordtype">bool</span> LoRaInitDriver(<span class="keywordtype">bool</span> (*SPI_WriteRead)(<span class="keywordtype">void</span> *pTransmitData, <span class="keywordtype">size_t</span> txSize, <span class="keywordtype">void</span> *pReceiveData, <span class="keywordtype">size_t</span> rxSize),</div>
+<div class="line"><a name="l00099"></a><span class="lineno">   99</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_Write)(<span class="keywordtype">void</span> *pTransmitData, <span class="keywordtype">size_t</span> txSize),</div>
+<div class="line"><a name="l00100"></a><span class="lineno">  100</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_Read)(<span class="keywordtype">void</span> *pReceiveData, <span class="keywordtype">size_t</span> rxSize),</div>
 <div class="line"><a name="l00101"></a><span class="lineno">  101</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_IsBusy)(<span class="keywordtype">void</span>),</div>
 <div class="line"><a name="l00102"></a><span class="lineno">  102</span>&#160;                    <span class="keywordtype">bool</span> (*SPI_IsTransmitterBusy)(<span class="keywordtype">void</span>),</div>
 <div class="line"><a name="l00103"></a><span class="lineno">  103</span>&#160;                    <span class="keywordtype">void</span> (*SPI_SetCSLow)(<span class="keywordtype">void</span>),</div>
@@ -161,90 +161,102 @@ $(function() {
 <div class="line"><a name="l00105"></a><span class="lineno">  105</span>&#160;                    <span class="keywordtype">void</span> (*setNRESETLow)(<span class="keywordtype">void</span>),</div>
 <div class="line"><a name="l00106"></a><span class="lineno">  106</span>&#160;                    <span class="keywordtype">void</span> (*setNRESETHigh)(<span class="keywordtype">void</span>),</div>
 <div class="line"><a name="l00107"></a><span class="lineno">  107</span>&#160;                    <span class="keywordtype">void</span> (*wait)(uint32_t ms)</div>
-<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;                    )__attribute__((nonnull));</div>
-<div class="line"><a name="l00114"></a><span class="lineno">  114</span>&#160;<span class="keywordtype">void</span> LoRaReset(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160; </div>
-<div class="line"><a name="l00174"></a><span class="lineno">  174</span>&#160;uint32_t LoRaBegin(uint32_t frequency);</div>
-<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;<span class="keywordtype">void</span> LoRaEnd();</div>
+<div class="line"><a name="l00108"></a><span class="lineno">  108</span>&#160;)__attribute__((nonnull));</div>
+<div class="line"><a name="l00109"></a><span class="lineno">  109</span>&#160; </div>
+<div class="line"><a name="l00115"></a><span class="lineno">  115</span>&#160;<span class="keywordtype">void</span> LoRaReset(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00116"></a><span class="lineno">  116</span>&#160; </div>
+<div class="line"><a name="l00175"></a><span class="lineno">  175</span>&#160;uint32_t LoRaBegin(uint32_t frequency);</div>
 <div class="line"><a name="l00176"></a><span class="lineno">  176</span>&#160; </div>
-<div class="line"><a name="l00194"></a><span class="lineno">  194</span>&#160;uint32_t LoRaBeginPacket(<span class="keywordtype">bool</span> implicitHeader);</div>
-<div class="line"><a name="l00195"></a><span class="lineno">  195</span>&#160;uint32_t LoRaEndPacket(<span class="keywordtype">bool</span> async);</div>
-<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;<span class="keywordtype">size_t</span> LoRaWrite(<span class="keyword">const</span> uint8_t *buffer, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00177"></a><span class="lineno">  177</span>&#160;<span class="keywordtype">void</span> LoRaEnd();</div>
+<div class="line"><a name="l00178"></a><span class="lineno">  178</span>&#160; </div>
+<div class="line"><a name="l00196"></a><span class="lineno">  196</span>&#160;uint32_t LoRaBeginPacket(<span class="keywordtype">bool</span> implicitHeader);</div>
 <div class="line"><a name="l00197"></a><span class="lineno">  197</span>&#160; </div>
-<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;uint32_t LoRaParsePacket(uint32_t size);</div>
-<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160;uint32_t LoRaPacketRssi();</div>
-<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="keywordtype">float</span> LoRaPacketSnr();</div>
-<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160;uint32_t LoRaPacketFrequencyError();</div>
-<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160; </div>
-<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160;uint32_t LoRaRssi();</div>
-<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160; </div>
-<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160;<span class="keywordtype">void</span> LoRaOnReceive(<span class="keywordtype">void</span>(*callback)(uint32_t));</div>
-<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="keywordtype">void</span> LoRaOnTxDone(<span class="keywordtype">void</span>(*callback)(<span class="keywordtype">void</span> ));</div>
+<div class="line"><a name="l00198"></a><span class="lineno">  198</span>&#160;uint32_t LoRaEndPacket(<span class="keywordtype">bool</span> async);</div>
+<div class="line"><a name="l00199"></a><span class="lineno">  199</span>&#160; </div>
+<div class="line"><a name="l00200"></a><span class="lineno">  200</span>&#160;<span class="keywordtype">size_t</span> LoRaWrite(<span class="keyword">const</span> uint8_t *buffer, <span class="keywordtype">size_t</span> size);</div>
+<div class="line"><a name="l00201"></a><span class="lineno">  201</span>&#160; </div>
+<div class="line"><a name="l00202"></a><span class="lineno">  202</span>&#160;uint32_t LoRaParsePacket(uint8_t size);</div>
+<div class="line"><a name="l00203"></a><span class="lineno">  203</span>&#160; </div>
+<div class="line"><a name="l00204"></a><span class="lineno">  204</span>&#160;uint32_t LoRaPacketRssi();</div>
+<div class="line"><a name="l00205"></a><span class="lineno">  205</span>&#160; </div>
+<div class="line"><a name="l00206"></a><span class="lineno">  206</span>&#160;<span class="keywordtype">float</span> LoRaPacketSnr();</div>
 <div class="line"><a name="l00207"></a><span class="lineno">  207</span>&#160; </div>
-<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;<span class="keywordtype">void</span> LoRaReceive(uint8_t size);</div>
+<div class="line"><a name="l00208"></a><span class="lineno">  208</span>&#160;uint32_t LoRaPacketFrequencyError();</div>
 <div class="line"><a name="l00209"></a><span class="lineno">  209</span>&#160; </div>
-<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160;<span class="keywordtype">void</span> LoRaIdle(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160; </div>
-<div class="line"><a name="l00218"></a><span class="lineno">  218</span>&#160;<span class="keywordtype">void</span> LoRaSleep(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00219"></a><span class="lineno">  219</span>&#160; </div>
-<div class="line"><a name="l00220"></a><span class="lineno">  220</span>&#160;<span class="keywordtype">void</span> LoRaSetTxPower(uint32_t level, uint32_t outputPin<span class="comment">/* = PA_OUTPUT_PA_BOOST_PIN*/</span>);</div>
-<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="keywordtype">void</span> LoRaSetFrequency(uint32_t frequency);</div>
-<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160;<span class="keywordtype">void</span> LoRaSetSpreadingFactor(uint32_t sf);</div>
-<div class="line"><a name="l00223"></a><span class="lineno">  223</span>&#160;<span class="keywordtype">void</span> LoRaSetSignalBandwidth(uint32_t sbw);</div>
-<div class="line"><a name="l00224"></a><span class="lineno">  224</span>&#160;<span class="keywordtype">void</span> LoRaSetCodingRate4(uint32_t denominator);</div>
-<div class="line"><a name="l00225"></a><span class="lineno">  225</span>&#160;<span class="keywordtype">void</span> LoRaSetPreambleLength(uint32_t length);</div>
-<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="keywordtype">void</span> LoRaSetSyncWord(uint32_t sw);</div>
-<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160;<span class="keywordtype">void</span> LoRaEnableCrc(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keywordtype">void</span> LoRaDisableCrc(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160;<span class="keywordtype">void</span> LoRaEnableInvertIQ(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keywordtype">void</span> LoRaDisableInvertIQ(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160;  </div>
-<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160;<span class="keywordtype">void</span> LoRaSetOCP(uint8_t mA);</div>
-<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160; </div>
-<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="keywordtype">void</span> LoRaSetGain(uint8_t gain);</div>
+<div class="line"><a name="l00210"></a><span class="lineno">  210</span>&#160;uint32_t LoRaRssi();</div>
+<div class="line"><a name="l00211"></a><span class="lineno">  211</span>&#160; </div>
+<div class="line"><a name="l00212"></a><span class="lineno">  212</span>&#160;<span class="keywordtype">void</span> LoRaOnReceive(<span class="keywordtype">void</span>(*callback)(uint32_t));</div>
+<div class="line"><a name="l00213"></a><span class="lineno">  213</span>&#160; </div>
+<div class="line"><a name="l00214"></a><span class="lineno">  214</span>&#160;<span class="keywordtype">void</span> LoRaOnTxDone(<span class="keywordtype">void</span>(*callback)(<span class="keywordtype">void</span>));</div>
+<div class="line"><a name="l00215"></a><span class="lineno">  215</span>&#160; </div>
+<div class="line"><a name="l00216"></a><span class="lineno">  216</span>&#160;<span class="keywordtype">void</span> LoRaReceive(uint8_t size);</div>
+<div class="line"><a name="l00217"></a><span class="lineno">  217</span>&#160; </div>
+<div class="line"><a name="l00221"></a><span class="lineno">  221</span>&#160;<span class="keywordtype">void</span> LoRaIdle(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00222"></a><span class="lineno">  222</span>&#160; </div>
+<div class="line"><a name="l00226"></a><span class="lineno">  226</span>&#160;<span class="keywordtype">void</span> LoRaSleep(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00227"></a><span class="lineno">  227</span>&#160; </div>
+<div class="line"><a name="l00228"></a><span class="lineno">  228</span>&#160;<span class="keywordtype">void</span> LoRaSetTxPower(uint32_t level, uint32_t outputPin<span class="comment">/* = PA_OUTPUT_PA_BOOST_PIN*/</span>);</div>
+<div class="line"><a name="l00229"></a><span class="lineno">  229</span>&#160; </div>
+<div class="line"><a name="l00230"></a><span class="lineno">  230</span>&#160;<span class="keywordtype">void</span> LoRaSetFrequency(uint32_t frequency);</div>
+<div class="line"><a name="l00231"></a><span class="lineno">  231</span>&#160; </div>
+<div class="line"><a name="l00232"></a><span class="lineno">  232</span>&#160;<span class="keywordtype">void</span> LoRaSetSpreadingFactor(uint32_t sf);</div>
+<div class="line"><a name="l00233"></a><span class="lineno">  233</span>&#160; </div>
+<div class="line"><a name="l00234"></a><span class="lineno">  234</span>&#160;<span class="keywordtype">void</span> LoRaSetSignalBandwidth(uint32_t sbw);</div>
+<div class="line"><a name="l00235"></a><span class="lineno">  235</span>&#160; </div>
+<div class="line"><a name="l00236"></a><span class="lineno">  236</span>&#160;<span class="keywordtype">void</span> LoRaSetCodingRate4(uint32_t denominator);</div>
+<div class="line"><a name="l00237"></a><span class="lineno">  237</span>&#160; </div>
+<div class="line"><a name="l00238"></a><span class="lineno">  238</span>&#160;<span class="keywordtype">void</span> LoRaSetPreambleLength(uint32_t length);</div>
+<div class="line"><a name="l00239"></a><span class="lineno">  239</span>&#160; </div>
+<div class="line"><a name="l00240"></a><span class="lineno">  240</span>&#160;<span class="keywordtype">void</span> LoRaSetSyncWord(uint32_t sw);</div>
+<div class="line"><a name="l00241"></a><span class="lineno">  241</span>&#160; </div>
+<div class="line"><a name="l00242"></a><span class="lineno">  242</span>&#160;<span class="keywordtype">void</span> LoRaEnableCrc(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00243"></a><span class="lineno">  243</span>&#160; </div>
+<div class="line"><a name="l00244"></a><span class="lineno">  244</span>&#160;<span class="keywordtype">void</span> LoRaDisableCrc(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00245"></a><span class="lineno">  245</span>&#160; </div>
-<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="comment">//void dumpRegisters(Stream&amp; out);</span></div>
-<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160;uint32_t LoRaAvailable(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;uint8_t LoRaRead(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160;uint8_t LoRaPeek(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00250"></a><span class="lineno">  250</span>&#160; </div>
-<div class="line"><a name="l00251"></a><span class="lineno">  251</span>&#160;<span class="keywordtype">void</span> LoRaSetOnReceive(<span class="keywordtype">void</span>(*_onReceiveCb)(<span class="keywordtype">void</span>));</div>
-<div class="line"><a name="l00252"></a><span class="lineno">  252</span>&#160;<span class="keywordtype">void</span> LoRaSetOnTxDone(<span class="keywordtype">void</span>(*_onTxDoneCb)(<span class="keywordtype">void</span>));</div>
-<div class="line"><a name="l00253"></a><span class="lineno">  253</span>&#160; </div>
-<div class="line"><a name="l00254"></a><span class="lineno">  254</span>&#160;<span class="keywordtype">void</span> LoRaExplicitHeaderMode(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keywordtype">void</span> LoRaImplicitHeaderMode();</div>
+<div class="line"><a name="l00246"></a><span class="lineno">  246</span>&#160;<span class="keywordtype">void</span> LoRaEnableInvertIQ(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00247"></a><span class="lineno">  247</span>&#160; </div>
+<div class="line"><a name="l00248"></a><span class="lineno">  248</span>&#160;<span class="keywordtype">void</span> LoRaDisableInvertIQ(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00249"></a><span class="lineno">  249</span>&#160; </div>
+<div class="line"><a name="l00255"></a><span class="lineno">  255</span>&#160;<span class="keywordtype">void</span> LoRaSetOCP(uint8_t mA);</div>
 <div class="line"><a name="l00256"></a><span class="lineno">  256</span>&#160; </div>
-<div class="line"><a name="l00257"></a><span class="lineno">  257</span>&#160;<span class="keywordtype">void</span> LoRaHandleDio0Rise(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00258"></a><span class="lineno">  258</span>&#160;<span class="keywordtype">bool</span> LoRaIsTransmitting(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00259"></a><span class="lineno">  259</span>&#160; </div>
-<div class="line"><a name="l00260"></a><span class="lineno">  260</span>&#160;uint32_t LoRaGetSpreadingFactor(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00261"></a><span class="lineno">  261</span>&#160;uint32_t LoRaGetSignalBandwidth(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160; </div>
-<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160;<span class="keywordtype">void</span> LoRaSetLdoFlag(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160; </div>
-<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;uint8_t LoRaReadRegister(uint8_t address);</div>
-<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160;<span class="keywordtype">void</span> LoRaWriteRegister(uint8_t address, uint8_t value);</div>
-<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value);</div>
+<div class="line"><a name="l00262"></a><span class="lineno">  262</span>&#160;<span class="keywordtype">void</span> LoRaSetGain(uint8_t gain);</div>
+<div class="line"><a name="l00263"></a><span class="lineno">  263</span>&#160; </div>
+<div class="line"><a name="l00264"></a><span class="lineno">  264</span>&#160;<span class="comment">//void dumpRegisters(Stream&amp; out);</span></div>
+<div class="line"><a name="l00265"></a><span class="lineno">  265</span>&#160;uint32_t LoRaAvailable(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00266"></a><span class="lineno">  266</span>&#160; </div>
+<div class="line"><a name="l00267"></a><span class="lineno">  267</span>&#160;uint8_t LoRaRead(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00268"></a><span class="lineno">  268</span>&#160; </div>
-<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;<span class="comment">//static void LoRaOnDio0Rise(void);</span></div>
+<div class="line"><a name="l00269"></a><span class="lineno">  269</span>&#160;uint8_t LoRaPeek(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00270"></a><span class="lineno">  270</span>&#160; </div>
-<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="comment">//private:</span></div>
-<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160;<span class="comment">//  SPISettings _spiSettings;</span></div>
-<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="comment">//  SPIClass* _spi;</span></div>
-<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160;<span class="comment">//  uint32_t _ss;</span></div>
-<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="comment">//  uint32_t _reset;</span></div>
-<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160;<span class="comment">//  uint32_t _dio0;</span></div>
-<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="comment">//  long _frequency;</span></div>
-<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160;<span class="comment">//  uint32_t _packetIndex;</span></div>
-<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="comment">//  uint32_t _implicitHeaderMode;</span></div>
-<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160;<span class="comment">//  void (*_onReceive)(uint32_t);</span></div>
-<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="comment">//  void (*_onTxDone)();</span></div>
+<div class="line"><a name="l00271"></a><span class="lineno">  271</span>&#160;<span class="keywordtype">void</span> LoRaSetOnReceive(<span class="keywordtype">void</span>(*_onReceiveCb)(uint32_t packetLength));</div>
+<div class="line"><a name="l00272"></a><span class="lineno">  272</span>&#160; </div>
+<div class="line"><a name="l00273"></a><span class="lineno">  273</span>&#160;<span class="keywordtype">void</span> LoRaSetOnTxDone(<span class="keywordtype">void</span>(*_onTxDoneCb)(<span class="keywordtype">void</span>));</div>
+<div class="line"><a name="l00274"></a><span class="lineno">  274</span>&#160; </div>
+<div class="line"><a name="l00275"></a><span class="lineno">  275</span>&#160;<span class="keywordtype">void</span> LoRaExplicitHeaderMode(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00276"></a><span class="lineno">  276</span>&#160; </div>
+<div class="line"><a name="l00277"></a><span class="lineno">  277</span>&#160;<span class="keywordtype">void</span> LoRaImplicitHeaderMode();</div>
+<div class="line"><a name="l00278"></a><span class="lineno">  278</span>&#160; </div>
+<div class="line"><a name="l00279"></a><span class="lineno">  279</span>&#160;<span class="keywordtype">void</span> LoRaHandleDio0Rise(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00280"></a><span class="lineno">  280</span>&#160; </div>
+<div class="line"><a name="l00281"></a><span class="lineno">  281</span>&#160;<span class="keywordtype">bool</span> LoRaIsTransmitting(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00282"></a><span class="lineno">  282</span>&#160; </div>
-<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;<span class="preprocessor">#ifdef  __cplusplus</span></div>
-<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160;}</div>
-<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00283"></a><span class="lineno">  283</span>&#160;uint32_t LoRaGetSpreadingFactor(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00284"></a><span class="lineno">  284</span>&#160; </div>
+<div class="line"><a name="l00285"></a><span class="lineno">  285</span>&#160;uint32_t LoRaGetSignalBandwidth(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00286"></a><span class="lineno">  286</span>&#160; </div>
-<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00287"></a><span class="lineno">  287</span>&#160;<span class="keywordtype">void</span> LoRaSetLdoFlag(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00288"></a><span class="lineno">  288</span>&#160; </div>
+<div class="line"><a name="l00289"></a><span class="lineno">  289</span>&#160;uint8_t LoRaReadRegister(uint8_t address);</div>
+<div class="line"><a name="l00290"></a><span class="lineno">  290</span>&#160; </div>
+<div class="line"><a name="l00291"></a><span class="lineno">  291</span>&#160;<span class="keywordtype">void</span> LoRaWriteRegister(uint8_t address, uint8_t value);</div>
+<div class="line"><a name="l00292"></a><span class="lineno">  292</span>&#160; </div>
+<div class="line"><a name="l00293"></a><span class="lineno">  293</span>&#160;uint8_t LoRaSingleTransfer(uint8_t address, uint8_t value);</div>
+<div class="line"><a name="l00294"></a><span class="lineno">  294</span>&#160; </div>
+<div class="line"><a name="l00295"></a><span class="lineno">  295</span>&#160;<span class="preprocessor">#ifdef    __cplusplus</span></div>
+<div class="line"><a name="l00296"></a><span class="lineno">  296</span>&#160;}</div>
+<div class="line"><a name="l00297"></a><span class="lineno">  297</span>&#160;<span class="preprocessor">#endif</span></div>
+<div class="line"><a name="l00298"></a><span class="lineno">  298</span>&#160; </div>
+<div class="line"><a name="l00299"></a><span class="lineno">  299</span>&#160;<span class="preprocessor">#endif</span></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
