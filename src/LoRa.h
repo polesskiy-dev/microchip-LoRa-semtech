@@ -205,7 +205,7 @@ uint32_t LoRaRssi();
 void LoRaOnReceive(void(*callback)(uint32_t));
 void LoRaOnTxDone(void(*callback)(void ));
 
-void LoRaReceive(uint32_t size);
+void LoRaReceive(uint8_t size);
 
 /**
  * @brief Switch LoRa to idle mode
@@ -244,6 +244,12 @@ void LoRaSetOCP(uint8_t mA);
 void LoRaSetGain(uint8_t gain);
 
 //void dumpRegisters(Stream& out);
+uint32_t LoRaAvailable(void);
+uint8_t LoRaRead(void);
+uint8_t LoRaPeek(void);
+
+void LoRaSetOnReceive(void(*_onReceiveCb)(void));
+void LoRaSetOnTxDone(void(*_onTxDoneCb)(void));
 
 void LoRaExplicitHeaderMode(void);
 void LoRaImplicitHeaderMode();
