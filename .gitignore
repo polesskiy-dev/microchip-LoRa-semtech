@@ -1,3 +1,5 @@
 .idea
 microchip-LoRa-semtech.X/.generated_files
 html
+/microchip-LoRa-semtech.X/build/
+/microchip-LoRa-semtech.X/dist/

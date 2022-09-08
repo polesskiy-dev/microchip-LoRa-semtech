@@ -97,8 +97,8 @@ uint32_t LoRaBegin(uint32_t frequency) {
     // set auto AGC
     LoRaWriteRegister(LORA_REG_MODEM_CONFIG_3, 0x04);
 
-    // set output power to 17 dBm
-    LoRaSetTxPower(17, LORA_PA_OUTPUT_RFO_PIN);
+    // set output power to 10 dBm
+    LoRaSetTxPower(10, LORA_PA_OUTPUT_RFO_PIN);
 
     // put in standby mode
     LoRaIdle();
