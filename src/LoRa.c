@@ -572,7 +572,7 @@ void LoRaImplicitHeaderMode(void) {
 };
 
 // Interrupt handler
-void LoRaHandleDio0Rise() {
+void LoRaHandleDio0Rise(uintptr_t context) {
     uint32_t irqFlags = LoRaReadRegister(LORA_REG_IRQ_FLAGS);
 
     // clear IRQ's

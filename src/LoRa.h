@@ -282,7 +282,7 @@ void LoRaExplicitHeaderMode(void);
 
 void LoRaImplicitHeaderMode();
 
-void LoRaHandleDio0Rise(void);
+void LoRaHandleDio0Rise(uintptr_t context);
 
 bool LoRaIsTransmitting(void);
 
